@@ -2,7 +2,17 @@
 const listaPosts = require('../data/postsList')
 
 function index(req, res) {
-    res.json({ numeroPosts: listaPosts.length, listaPosts });
+
+    //var let la lista post dopo la ricerca é unguale a quella originale all'inizio
+    let serchedList = listaPosts;
+    // Se la richiesta contiene un filtro, allora filtriamo il menu
+    if (req.query.tags) {
+        serchedList = listaPosts.filter(
+            post => post.tags.includes(req.query.tags)
+        );
+    }
+
+    res.json({ numeroPosts: serchedList.length, serchedList });
 }
 function show(req, res) {
     //rendo utilizzabile singolo post usando id
