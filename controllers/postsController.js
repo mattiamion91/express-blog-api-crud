@@ -10,7 +10,10 @@ function show(req, res) {
     //cerco post specifico usando metodo 'find' e usando id specifico recuerparo con req.params.id
     const showById = listaPosts.find((post) => post.id === postById) //sintasssi meootdo find copiata da mdn
     if (!showById) { //SE  showbyid non esiste NOT ritorna messaggio di errore
-        return res.status(404).json({ message: 'prodotto non trovato' });
+        return res.status(404).json({
+            error: 'not found - errore 404',
+            message: 'prodotto non trovato'
+        });
     }
     res.json(showById);
 }
@@ -24,7 +27,25 @@ function modify(req, res) {
     res.send('Modifica parziale del post ' + req.params.id);
 }
 function destroy(req, res) {
-    res.send('Eliminazione del post ' + req.params.id);
+    //recupero l'id dall'URL e lo trasformo in un numero
+    const id = parseInt(req.params.id)
+    //metodo find per trovare il post usando id
+    const post = listaPosts.find((pst) => pst.id === id)
+    //valido che il post esista
+    if (!post) {
+        return res.status(404).json({
+            error: 'not found - errore 404',
+            message: 'prodotto non trovato'
+        });
+    }
+    //rimuovo post con metodo splice 
+    listaPosts.splice(listaPosts.indexOf(post), 1);
+    //stampo nel terminale la lista aggiornata
+    console.log(listaPosts);
+    // forziamo status secondo convenzioni REST che chiude anche function
+    res.sendStatus(204)
+
+    //res.send('Eliminazione del post ' + req.params.id);
 }
 // esportiamo tutto
 module.exports = { index, show, store, update, modify, destroy }
