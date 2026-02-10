@@ -28,10 +28,28 @@ function show(req, res) {
     res.json(showById);
 }
 function store(req, res) {
-    console.log(req.body); // log per stampare in terminale di dati in arrivo
-
-    res.send('Creazione nuovo post'); //da questa rotta di crud uso res.send perche mi restitusce un messaggio/html, sopra uso res.json perche mi deve tornare un oggetto json
+    //creo id univoco usado metodo date e gli attuali milliscondi a partire dal 1 gennaio 1970
+    const newId = Date.now();
+    // Creiamo un nuovo oggetto post
+    const newPost = {
+        id: newId,
+        title: req.body.title,
+        content: req.body.content,
+        image: req.body.image,
+        tags: req.body.tags,
+        ingredients: req.body.ingredients,
+    }
+    // Aggiungiamo il nuovo post alla lista
+    listaPosts.push(newPost);
+    // controlliamo in console che stampa array oggetti aggiornato
+    console.log(listaPosts);
+    // Restituiamo lo status corretto e il post
+    res.status(201);
+    res.json(newPost);
+    //console.log(req.body); // log per stampare in terminale di dati in arrivo
+    //res.send('Creazione nuovo post'); //da questa rotta di crud uso res.send perche mi restitusce un messaggio/html, sopra uso res.json perche mi deve tornare un oggetto json
 }
+
 function update(req, res) {
     res.send('Modifica integrale del post ' + req.params.id);
 }
