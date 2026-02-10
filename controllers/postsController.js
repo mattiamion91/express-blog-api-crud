@@ -14,19 +14,21 @@ function index(req, res) {
 
     res.json({ numeroPosts: serchedList.length, serchedList });
 }
+
 function show(req, res) {
     //rendo utilizzabile singolo post usando id
     const postById = parseInt(req.params.id) //uso parse int perche req.params.id mi sertitusce una stringa e io ho bisogna di un numero per rendere vera l'uguaglianza stretta (non ci sarei mai arrivato da solo!)
     //cerco post specifico usando metodo 'find' e usando id specifico recuerparo con req.params.id
-    const showById = listaPosts.find((post) => post.id === postById) //sintasssi meootdo find copiata da mdn
-    if (!showById) { //SE  showbyid non esiste NOT ritorna messaggio di errore
+    const myPost = listaPosts.find((post) => post.id === postById) //sintasssi meootdo find copiata da mdn
+    if (!myPost) { //SE  myPost non esiste NOT ritorna messaggio di errore
         return res.status(404).json({
             error: 'not found - errore 404',
             message: 'prodotto non trovato'
         });
     }
-    res.json(showById);
+    res.json(myPost);
 }
+
 function store(req, res) {
     //creo id univoco usado metodo date e gli attuali milliscondi a partire dal 1 gennaio 1970
     const newId = Date.now();
@@ -37,7 +39,6 @@ function store(req, res) {
         content: req.body.content,
         image: req.body.image,
         tags: req.body.tags,
-        ingredients: req.body.ingredients,
     }
     // Aggiungiamo il nuovo post alla lista
     listaPosts.push(newPost);
@@ -51,11 +52,32 @@ function store(req, res) {
 }
 
 function update(req, res) {
-    res.send('Modifica integrale del post ' + req.params.id);
+    //rendo utilizzabile singolo post usando id
+    const postById = parseInt(req.params.id) //uso parse int perche req.params.id mi sertitusce una stringa e io ho bisogna di un numero per rendere vera l'uguaglianza stretta (non ci sarei mai arrivato da solo!)
+    //cerco post specifico usando metodo 'find' e usando id specifico recuerparo con req.params.id
+    const myPost = listaPosts.find((post) => post.id === postById) //sintasssi meootdo find copiata da mdn
+    if (!myPost) { //SE  myPost non esiste NOT ritorna messaggio di errore
+        return res.status(404).json({
+            error: 'not found - errore 404',
+            message: 'prodotto non trovato'
+        });
+    }
+    //aggiurno il post riassegnando valori delle proprita allinterno dell'oggetto
+    myPost.title = req.body.title;
+    myPost.content = req.body.content
+    myPost.image = req.body.image
+    myPost.tags = req.body.tags
+    //controllo
+    console.log(listaPosts);
+    //restitrusco jsno post appena aggiornato
+    res.json(myPost)
+    //res.send('Modifica integrale del post ' + req.params.id);
 }
+
 function modify(req, res) {
     res.send('Modifica parziale del post ' + req.params.id);
 }
+
 function destroy(req, res) {
     //recupero l'id dall'URL e lo trasformo in un numero
     const id = parseInt(req.params.id)
