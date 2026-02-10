@@ -5,6 +5,9 @@ const port = 3000
 const rottePosts = require('./routes/posts')
 
 app.use(express.static('public')) //asset statici di expressjs (middleware)
+
+app.use(express.json()); //registro body parser per applicaton/json
+
 //rotta index
 app.get('/', (req, res) => { //prima rotta preincipale
     res.send('<h1>rotta di home del nostro blog</h1>')

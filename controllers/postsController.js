@@ -28,6 +28,8 @@ function show(req, res) {
     res.json(showById);
 }
 function store(req, res) {
+    console.log(req.body); // log per stampare in terminale di dati in arrivo
+
     res.send('Creazione nuovo post'); //da questa rotta di crud uso res.send perche mi restitusce un messaggio/html, sopra uso res.json perche mi deve tornare un oggetto json
 }
 function update(req, res) {
