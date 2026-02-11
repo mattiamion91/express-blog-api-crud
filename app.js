@@ -1,10 +1,12 @@
-const express = require('express')
-const app = express()
-const port = 3000
+const express = require('express');
+const app = express();
+const port = 3000;
 //importo istanza rotte
-const rottePosts = require('./routes/posts')
+const rottePosts = require('./routes/posts');
+//imporo middleware gestione rotta inseistente
+const notFound = require("./middlewares/notFound");
 
-app.use(express.static('public')) //asset statici di expressjs (middleware)
+app.use(express.static('public')); //asset statici di expressjs (middleware)
 
 app.use(express.json()); //registro body parser per applicaton/json
 
@@ -16,7 +18,10 @@ app.get('/', (req, res) => { //prima rotta preincipale
 })
 
 //istanza rotte posts
-app.use('/posts', rottePosts)
+app.use('/posts', rottePosts);
+
+//registro middleware di gestione rotta insesistenste
+app.use(notFound);
 
 // Avvia il server e lo mette in ascolto per richieste HTTP sulla porta specificata
 app.listen(port, () => {
