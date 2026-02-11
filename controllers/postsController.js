@@ -77,6 +77,8 @@ function update(req, res) {
 function modify(req, res) {
     //rendo utilizzabile singolo post usando id
     const postById = parseInt(req.params.id) //uso parse int perche req.params.id mi sertitusce una stringa e io ho bisogna di un numero per rendere vera l'uguaglianza stretta (non ci sarei mai arrivato da solo!)
+    // introduciamo un errore a caso per test middelware err 500
+    throw new Error("Errore di test middleware");
     //cerco post specifico usando metodo 'find' e usando id specifico recuerparo con req.params.id
     const myPost = listaPosts.find((post) => post.id === postById) //sintasssi meootdo find copiata da mdn
     if (!myPost) { //SE  myPost non esiste NOT ritorna messaggio di errore

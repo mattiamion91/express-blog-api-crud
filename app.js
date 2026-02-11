@@ -5,6 +5,8 @@ const port = 3000;
 const rottePosts = require('./routes/posts');
 //imporo middleware gestione rotta inseistente
 const notFound = require("./middlewares/notFound");
+//importo middleware errore 500
+const handleErrors = require("./middlewares/handleErrors")
 
 app.use(express.static('public')); //asset statici di expressjs (middleware)
 
@@ -20,8 +22,12 @@ app.get('/', (req, res) => { //prima rotta preincipale
 //istanza rotte posts
 app.use('/posts', rottePosts);
 
+//resistro middleware di gestione errore 500
+app.use(handleErrors)
+
+
 //registro middleware di gestione rotta insesistenste
-app.use(notFound);
+app.use(notFound); //inserisco la gestione errore rotta in app.js prima dell'ascolto alla posta perche mi deve tornare per errore su ogni rotta tipo "http://localhost:3000/posts/pippo/luca"
 
 // Avvia il server e lo mette in ascolto per richieste HTTP sulla porta specificata
 app.listen(port, () => {
