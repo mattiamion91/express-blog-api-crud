@@ -77,8 +77,8 @@ function update(req, res) {
 function modify(req, res) {
     //rendo utilizzabile singolo post usando id
     const postById = parseInt(req.params.id) //uso parse int perche req.params.id mi sertitusce una stringa e io ho bisogna di un numero per rendere vera l'uguaglianza stretta (non ci sarei mai arrivato da solo!)
-    // introduciamo un errore a caso per test middelware err 500
-    throw new Error("Errore di test middleware");
+    /*// introduciamo un errore a caso per test middelware err 500
+        throw new Error("Errore di test middleware");*/
     //cerco post specifico usando metodo 'find' e usando id specifico recuerparo con req.params.id
     const myPost = listaPosts.find((post) => post.id === postById) //sintasssi meootdo find copiata da mdn
     if (!myPost) { //SE  myPost non esiste NOT ritorna messaggio di errore
@@ -88,17 +88,28 @@ function modify(req, res) {
         });
     }
     //aggiurno il post riassegnando valori delle proprita all'interno dell'oggetto
-    req.body.title ? myPost.title = req.body.title : myPost.title = myPost.title //req.body.title esiste? se si (true) assegna nuvo valore se no (fasle) restitusci il valore inizilate
+    /* req.body.title ? myPost.title = req.body.title : myPost.title = myPost.title //req.body.title esiste? se si (true) assegna nuvo valore se no (fasle) restitusci il valore inizilate
     if (req.body.content) { //stessa cosa ma usando if
         myPost.content = req.body.content
     }
     req.body.image ? myPost.image = req.body.image : myPost.image = myPost.image
-     if (req.body.tags) {
+    if (req.body.tags) {
         myPost.tags = req.body.tags
-    }
-    //controllo
+    } */
+    //devo ciclare tutte le proprieta presenti nel mio oggetto for...in per le proprita degli oggetti! 
+    /* for (let proprieta in req.body) { //prendo tutte le porprieta prendeti nel mio oggetto inviato col verbo http patch da postman (req.body)
+        console.log(proprieta);
+        myPost[proprieta] = req.body[proprieta] //se la propirta del mio oggetto ciclato é presente nelle proprita dell'oggetto la riassegno DEVO USARE LA BRACKET NOT NON DOT NOT!!
+    } */
+    const modificabili = ["title", "content", "image", "tags"] //dicharo un array con dentro le prop modificavili
+    modificabili.forEach(proprieta => { //posso usare forEach su array prop
+        if (req.body[proprieta]) { //se la prop dichirata esiste 
+            myPost[proprieta] = req.body[proprieta] //riassegna il vaolre
+        }
+    });
+    //controllo lista modificata
     console.log(listaPosts);
-    //restitrusco jsno post appena aggiornato
+    //restitrusco json post appena aggiornato
     res.json(myPost)
     //res.send('Modifica parziale del post ' + req.params.id);
 }

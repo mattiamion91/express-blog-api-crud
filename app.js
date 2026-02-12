@@ -22,11 +22,10 @@ app.get('/', (req, res) => { //prima rotta preincipale
 //istanza rotte posts
 app.use('/posts', rottePosts);
 
-//resistro middleware di gestione errore 500
+//resistro middleware di gestione errore 500 (global)
 app.use(handleErrors)
 
-
-//registro middleware di gestione rotta insesistenste
+//registro middleware di gestione rotta insesistenste (global)
 app.use(notFound); //inserisco la gestione errore rotta in app.js prima dell'ascolto alla posta perche mi deve tornare per errore su ogni rotta tipo "http://localhost:3000/posts/pippo/luca"
 
 // Avvia il server e lo mette in ascolto per richieste HTTP sulla porta specificata
